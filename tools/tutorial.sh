@@ -1,0 +1,1 @@
+python playgame.py "python ../bot/MyBot.py" "python sample_bots/python/RandomBot.py" --map_file maps/example/tutorial1.map --log_dir game_logs --turns 60 --scenario --food none --player_seed 7 --verbose --log_error  -e

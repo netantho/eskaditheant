@@ -1,0 +1,6 @@
+# Extensions
+*.pyc
+*.log
+
+# Folders
+tools/game_logs/*
