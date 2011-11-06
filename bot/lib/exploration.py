@@ -10,6 +10,7 @@ class Exploration():
 		Constructor
 		
 		\param self
+		\param object instance of the ants class
 		"""
 		self.ants = ants
 		pass
@@ -19,7 +20,6 @@ class Exploration():
 		Return an array of couples of the unexplored tiles
 		
 		\param self
-		\param object instance of the ants class
 		\return array couples of the unexplored tiles
 		"""
 		unseen = []

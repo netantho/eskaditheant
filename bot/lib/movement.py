@@ -10,6 +10,7 @@ class Movement():
 		Constructor
 		
 		\param self
+		\param object instance of the ants class
 		"""
 		self.ants = ants
 		pass
@@ -19,13 +20,10 @@ class Movement():
 		Move an ant one tile in a direction
 		
 		\param self
-		\param object instance of the ants class
-		\param array orders already issued
 		\param (x, y) coordinates of the current location
 		\param char n|s|w|e direction of the movement
 		\return bool True if unoccupied and not already targeted, else False
 		"""
-		global orders
 		
 		new_loc = self.ants.destination(loc, direction)
 		# unoccupied : without food or ant
@@ -44,14 +42,10 @@ class Movement():
 		Simulate a manhattan pathfinding for food and issue the order if the destination is possible
 		
 		\param self
-		\param object instance of the ants class
-		\param array orders already issued
-		\param hash location of the target food as the key, location of the assigned ant as the value
 		\param (x, y) coordinates of the current location
 		\param (x, y) coordinates of the destination location
 		\return True if the destination is possible, else False
 		"""
-		global orders, targets
 		
 		directions = self.ants.direction(loc, dest)
 		for direction in directions:

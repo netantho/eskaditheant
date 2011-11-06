@@ -51,7 +51,6 @@ class MyBot:
 		\param self
 		\param object instance of the ants class
 		"""
-		global orders, targets
 		
 		# prevent stepping on own hill
 		for hill_loc in ants.my_hills():
