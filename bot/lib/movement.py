@@ -1,3 +1,9 @@
+import sys
+import os
+sys.path.append(os.path.abspath('../'))
+
+import variables
+
 class Movement():
 	def __init__(self, ants):
 		"""
@@ -5,9 +11,10 @@ class Movement():
 		
 		\param self
 		"""
+		self.ants = ants
 		pass
 	
-	def do_move_direction(self, ants, orders, loc, direction):
+	def do_move_direction(self, loc, direction):
 		"""
 		Move an ant one tile in a direction
 		
@@ -18,19 +25,21 @@ class Movement():
 		\param char n|s|w|e direction of the movement
 		\return bool True if unoccupied and not already targeted, else False
 		"""
-		new_loc = ants.destination(loc, direction)
+		global orders
+		
+		new_loc = self.ants.destination(loc, direction)
 		# unoccupied : without food or ant
 		# We don't want to go where another ant has already gone, and not the last location
-		if (ants.unoccupied(new_loc) and (new_loc not in orders)):
+		if (self.ants.unoccupied(new_loc) and (new_loc not in variables.orders)):
 			# Go !
-			ants.issue_order((loc, direction))
+			self.ants.issue_order((loc, direction))
 			# Save the order
-			orders[new_loc] = loc
-			return (orders, True)
+			variables.orders[new_loc] = loc
+			return True
 		else:
-			return (orders, False)
+			return False
 	
-	def do_move_location(self, ants, orders, targets, loc, dest):
+	def do_move_location(self, loc, dest):
 		"""
 		Simulate a manhattan pathfinding for food and issue the order if the destination is possible
 		
@@ -42,10 +51,11 @@ class Movement():
 		\param (x, y) coordinates of the destination location
 		\return True if the destination is possible, else False
 		"""
-		directions = ants.direction(loc, dest)
+		global orders, targets
+		
+		directions = self.ants.direction(loc, dest)
 		for direction in directions:
-			(orders, move_bool) = self.do_move_direction(ants, orders, loc, direction)
-			if (move_bool):
-				targets[dest] = loc
-				return (orders, targets, True)
-		return (orders, targets, False)
+			if self.do_move_direction(loc, direction):
+				variables.targets[dest] = loc
+				return True
+		return False
