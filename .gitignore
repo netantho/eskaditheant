@@ -4,3 +4,5 @@
 
 # Folders
 tools/game_logs/*
+.project
+.pydevproject
