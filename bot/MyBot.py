@@ -72,7 +72,7 @@ class MyBot:
 		self.attack.attack_hills(self.hills)
 		self.exploration.remove_seen()
 		self.exploration.explore()
-		self.defence.unblock_own_hill()
+		self.defence.unblock_own_hill_complex()
 
 
 if __name__ == '__main__':

@@ -6,3 +6,5 @@
 tools/game_logs/*
 .project
 .pydevproject
+/bot/.variables.py.kate-swp
+/bot.zip

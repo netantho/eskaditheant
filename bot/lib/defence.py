@@ -4,6 +4,8 @@ sys.path.append(os.path.abspath('../'))
 
 import variables
 
+import logging
+
 class Defence():
 	def __init__(self, ants, movement):
 		"""
@@ -16,7 +18,21 @@ class Defence():
 		self.ants = ants
 		self.movement = movement
 	
-	def unblock_own_hill(self):
+	def unblock_own_hill_simple(self):
+		"""
+		Check if there's an ant on my hill and if so, move it in one of the 4 directions
+		
+		\param self
+		"""
+		# unblock own hill
+		for hill_loc in self.ants.my_hills():
+			if hill_loc in self.ants.my_ants() and hill_loc not in variables.orders.values():
+				for direction in ('s','e','w','n'):
+					logging.debug(direction)
+					if self.movement.do_move_direction(hill_loc, direction):
+						break
+	
+	def unblock_own_hill_complex(self):
 		"""
 		Check if there's an ant on my hill and if so, move it
 		
@@ -25,6 +41,4 @@ class Defence():
 		# unblock own hill
 		for hill_loc in self.ants.my_hills():
 			if hill_loc in self.ants.my_ants() and hill_loc not in variables.orders.values():
-				for direction in ('s','e','w','n'):
-					if self.movement.do_move_direction(hill_loc, direction):
-						break
+				self.movement.shift_ant(hill_loc)

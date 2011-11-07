@@ -52,3 +52,18 @@ class Movement():
 				variables.targets[dest] = loc
 				return True
 		return False
+	
+	def shift_ant(self, ant_loc):
+		"""
+		Recursive method to shift an ant from one tile and shift others to do so if necessary
+		
+		\param self
+		"""
+		moved_ant = False
+		for direction in ('s','e'):
+			moved_ant = self.do_move_direction(ant_loc, direction)
+			if moved_ant:
+				break
+		if (not moved_ant):
+			(x,y) = ant_loc
+			self.shift_ant((x+1,y))
