@@ -36,7 +36,7 @@ class MyBot:
 		"""
 		log_file = 'logs/bot'+str(date.today())+'_'
 		i=0
-		while os.path.exists(log_file+str(i)):
+		while os.path.exists(log_file+str(i)+'.log'):
 			i+=1
 
 		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(i)+'.log',level=logging.DEBUG)
@@ -60,6 +60,8 @@ class MyBot:
 		self.exploration = Exploration(ants, self.movement)
 		# store unexplored locations
 		self.exploration.generate_unseen()
+		# create map's graph
+		self.graph = self.pathfinding.generate_graph()
 	
 	def do_turn(self, ants):
 		"""
@@ -69,13 +71,22 @@ class MyBot:
 		\param object instance of the ants class
 		"""
 		
-		#for row in ants.map:
-			#logging.debug(row)
+
 		
 		# clean the mess of the old turns
 		variables.orders = {}
 		variables.targets = {}
 		
+		#logging.debug("rows: "+str(ants.rows))
+		#logging.debug("cols: "+str(ants.cols))
+		
+		my_ants = ants.my_ants()
+		path = self.pathfinding.bfs(my_ants[0], (1,1), self.graph)
+		logging.debug(path)
+
+		#for row in ants.map:
+			#logging.debug(row)
+
 		self.orders.prevent_stepping_hill()
 		self.food.grab_visible_food()
 		self.hills = self.attack.save_enemy_hills(self.hills)
