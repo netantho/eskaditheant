@@ -4,6 +4,8 @@ sys.path.append(os.path.abspath('../'))
 
 import variables
 
+import logging
+
 class Exploration():
 	def __init__(self, ants, movement):
 		"""
@@ -48,10 +50,14 @@ class Exploration():
 				unseen_dist = []
 				# store and sort distances of unexplored areas
 				for unseen_loc in self.unseen:
-					dist = self.ants.distance(ant_loc, unseen_loc)
-					unseen_dist.append((dist, unseen_loc))
+					if unseen_loc not in variables.targets:
+						dist = self.ants.distance(ant_loc, unseen_loc)
+						unseen_dist.append((dist, unseen_loc))
 				unseen_dist.sort()
 				# give orders to explore
 				for dist, unseen_loc in unseen_dist:
 					if self.movement.do_move_location(ant_loc, unseen_loc):
+						#logging.debug("Exploration, from ... to ...")
+						#logging.debug(ant_loc)
+						#logging.debug(unseen_loc)
 						break
