@@ -52,8 +52,9 @@ class MyBot:
 		# initialize data structures after learning the game settings
 		self.hills = []
 		self.orders = Orders(ants)
-		self.movement = Movement(ants)
-		self.pathfinding = Pathfinding(ants, self.movement)
+		self.pathfinding = Pathfinding(ants)
+		self.graph = self.pathfinding.generate_graph()
+		self.movement = Movement(ants, self.pathfinding, self.graph)
 		self.food = Food(ants, self.movement)
 		self.attack = Attack(ants, self.movement)
 		self.defence = Defence(ants, self.movement)
@@ -61,7 +62,6 @@ class MyBot:
 		# store unexplored locations
 		self.exploration.generate_unseen()
 		# create map's graph
-		self.graph = self.pathfinding.generate_graph()
 	
 	def do_turn(self, ants):
 		"""
@@ -71,8 +71,6 @@ class MyBot:
 		\param object instance of the ants class
 		"""
 		
-
-		
 		# clean the mess of the old turns
 		variables.orders = {}
 		variables.targets = {}
@@ -80,9 +78,9 @@ class MyBot:
 		#logging.debug("rows: "+str(ants.rows))
 		#logging.debug("cols: "+str(ants.cols))
 		
-		my_ants = ants.my_ants()
-		path = self.pathfinding.bfs(my_ants[0], (1,1), self.graph)
-		logging.debug(path)
+		#my_ants = ants.my_ants()
+		#path = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(my_ants[0], (1,1), self.graph))
+		#logging.debug(path)
 
 		#for row in ants.map:
 			#logging.debug(row)

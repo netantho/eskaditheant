@@ -133,7 +133,7 @@ class Ants():
                         
     def time_remaining(self):
         return self.turntime - int(1000 * (time.time() - self.turn_start_time))
-    
+
     def issue_order(self, order):
         'issue an order by writing the proper ant location and direction'
         (row, col), direction = order
@@ -220,6 +220,9 @@ class Ants():
             if col1 - col2 <= width2:
                 d.append('w')
         return d
+
+	def get_map(self):
+		return self.map
 
     def visible(self, loc):
         ' determine which squares are visible to the given player '

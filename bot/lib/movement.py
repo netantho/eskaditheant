@@ -4,8 +4,10 @@ sys.path.append(os.path.abspath('../'))
 
 import variables
 
+import logging
+
 class Movement():
-	def __init__(self, ants):
+	def __init__(self, ants, pathfinding, graph):
 		"""
 		Constructor
 		
@@ -13,13 +15,15 @@ class Movement():
 		\param object instance of the ants class
 		"""
 		self.ants = ants
+		self.pathfinding = pathfinding
+		self.graph = graph
 	
 	def do_move_direction(self, loc, direction):
 		"""
 		Move an ant one tile in a direction
 		
 		\param self
-		\param (x, y) coordinates of the current location
+		\param (r, c) coordinates of the current location
 		\param char n|s|w|e direction of the movement
 		\return bool True if unoccupied and not already targeted, else False
 		"""
@@ -41,12 +45,13 @@ class Movement():
 		Simulate a manhattan pathfinding for food and issue the order if the destination is possible
 		
 		\param self
-		\param (x, y) coordinates of the current location
-		\param (x, y) coordinates of the destination location
+		\param (r, c) coordinates of the current location
+		\param (r, c) coordinates of the destination location
 		\return True if the destination is possible, else False
 		"""
 		
-		directions = self.ants.direction(loc, dest)
+		#directions = self.ants.direction(loc, dest)
+		directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
 		for direction in directions:
 			if self.do_move_direction(loc, direction):
 				variables.targets[dest] = loc

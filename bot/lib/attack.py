@@ -21,8 +21,8 @@ class Attack():
 		Save the unknown and visible enemy hills
 		
 		\param self
-		\param list of (x,y) enemies' hills
-		\return list of (x,y) updated enemies' hills
+		\param list of (r,c) enemies' hills
+		\return list of (r,c) updated enemies' hills
 		"""
 		for hill_loc, hill_owner in self.ants.enemy_hills():
 			if hill_loc not in hills:
@@ -34,7 +34,7 @@ class Attack():
 		Calculate distances between ants and hills and give orders to attack
 		
 		\param self
-		\param list of (x,y) ennemies' hills
+		\param list of (r,c) ennemies' hills
 		"""
 		# compute the distances to the hills and sort it
 		ant_dist = []
