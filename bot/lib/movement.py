@@ -59,11 +59,22 @@ class Movement():
 		
 		\param self
 		"""
+		# invalid ant
+		if ant_loc not in self.ants.my_ants():
+			return False
 		moved_ant = False
-		for direction in ('s','e'):
+		for direction in ('s','e','w','n'):
 			moved_ant = self.do_move_direction(ant_loc, direction)
 			if moved_ant:
-				break
+				return True
 		if (not moved_ant):
-			(x,y) = ant_loc
-			self.shift_ant((x+1,y))
+			(r,c) = ant_loc
+			if self.shift_ant((r+1,c)):
+				return True
+			elif self.shift_ant((r,c+1)):
+				return True
+			if self.shift_ant((r-1,c)):
+				return True
+			elif self.shift_ant((r,c-1)):
+				return True
+			return False
