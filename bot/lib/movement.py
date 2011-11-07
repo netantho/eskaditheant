@@ -13,7 +13,6 @@ class Movement():
 		\param object instance of the ants class
 		"""
 		self.ants = ants
-		pass
 	
 	def do_move_direction(self, loc, direction):
 		"""

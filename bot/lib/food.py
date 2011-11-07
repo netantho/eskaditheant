@@ -1,0 +1,40 @@
+import sys
+import os
+sys.path.append(os.path.abspath('../'))
+
+import variables
+
+class Food():
+	def __init__(self, ants, movement):
+		"""
+		Constructor
+		
+		\param self
+		\param object instance of the ants class
+		"""
+		self.ants = ants
+		self.movement = movement
+
+	def grab_visible_food(self):
+		"""
+		Calculate distances between ants and food and give orders to grab
+		
+		\param self
+		"""
+		# find close food
+		ant_dist = []
+		for food_loc in self.ants.food():
+			for ant_loc in self.ants.my_ants():
+				dist = self.ants.distance(ant_loc, food_loc)
+				ant_dist.append((dist, ant_loc, food_loc))
+		ant_dist.sort()
+		
+		# debug
+		#logging.debug(targets)
+		#logging.debug(ants.food())
+		
+		# give instructions to free ants to grab food
+		for dist, ant_loc, food_loc in ant_dist:
+			# assign an ant to grab food
+			if food_loc not in variables.targets and ant_loc not in variables.targets.values():
+				self.movement.do_move_location(ant_loc, food_loc)

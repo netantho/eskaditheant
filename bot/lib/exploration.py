@@ -5,25 +5,53 @@ sys.path.append(os.path.abspath('../'))
 import variables
 
 class Exploration():
-	def __init__(self, ants):
+	def __init__(self, ants, movement):
 		"""
 		Constructor
 		
 		\param self
 		\param object instance of the ants class
+		\param object instance of the movement class
 		"""
 		self.ants = ants
-		pass
+		self.movement = movement
+		self.unseen = []
 	
 	def generate_unseen(self):
 		"""
-		Return an array of couples of the unexplored tiles
+		Append couples of the unexplored tiles to self.unseen
 		
 		\param self
-		\return array couples of the unexplored tiles
 		"""
-		unseen = []
 		for row in range(self.ants.rows):
 			for col in range(self.ants.cols):
-				unseen.append((row, col))
-		return unseen
+				self.unseen.append((row, col))
+	
+	def remove_seen(self):
+		"""
+		Remove explored tiles in self.unseen
+		
+		\param self
+		"""
+		for loc in self.unseen[:]: # : to make sure this list is different from the one we are deleting from
+			if self.ants.visible(loc):
+				self.unseen.remove(loc)
+	
+	def explore(self):
+		"""
+		Calculate distances between ants and unexplored tiles and explore
+		
+		\param self
+		"""
+		for ant_loc in self.ants.my_ants():
+			if ant_loc not in variables.orders.values():
+				unseen_dist = []
+				# store and sort distances of unexplored areas
+				for unseen_loc in self.unseen:
+					dist = self.ants.distance(ant_loc, unseen_loc)
+					unseen_dist.append((dist, unseen_loc))
+				unseen_dist.sort()
+				# give orders to explore
+				for dist, unseen_loc in unseen_dist:
+					if self.movement.do_move_location(ant_loc, unseen_loc):
+						break
