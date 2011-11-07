@@ -12,12 +12,12 @@ from orders import Orders
 from food import Food
 from attack import Attack
 from defence import Defence
+from pathfinding import Pathfinding
 
+import os
 from datetime import date
 import time
 import logging
-
-logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(time.time())+'.log',level=logging.DEBUG)
 
 # define a class with a do_turn method
 # the Ants.run method will parse and update bot input
@@ -34,6 +34,12 @@ class MyBot:
 		
 		\param self
 		"""
+		log_file = 'logs/bot'+str(date.today())+'_'
+		i=0
+		while os.path.exists(log_file+str(i)):
+			i+=1
+
+		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(i)+'.log',level=logging.DEBUG)
 		pass
 	
 	def do_setup(self, ants):
@@ -45,8 +51,9 @@ class MyBot:
 		"""
 		# initialize data structures after learning the game settings
 		self.hills = []
-		self.movement = Movement(ants)
 		self.orders = Orders(ants)
+		self.movement = Movement(ants)
+		self.pathfinding = Pathfinding(ants, self.movement)
 		self.food = Food(ants, self.movement)
 		self.attack = Attack(ants, self.movement)
 		self.defence = Defence(ants, self.movement)
@@ -61,6 +68,9 @@ class MyBot:
 		\param self
 		\param object instance of the ants class
 		"""
+		
+		#for row in ants.map:
+			#logging.debug(row)
 		
 		# clean the mess of the old turns
 		variables.orders = {}
