@@ -51,11 +51,18 @@ class Movement():
 		"""
 		
 		#directions = self.ants.direction(loc, dest)
-		directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
+		#directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
+		(locr, locc) = loc
+		(destr, destc) = dest
+		directions = self.pathfinding.coordinates_to_directions(self.pathfinding.astar(locr, locc, destr, destc))
+		logging.debug("directions")
+		logging.debug(directions)
 		for direction in directions:
 			if self.do_move_direction(loc, direction):
 				variables.targets[dest] = loc
 				return True
+		logging.debug("do_move_location false")
+		variables.targets[dest] = None
 		return False
 	
 	def shift_ant(self, ant_loc):
@@ -68,18 +75,22 @@ class Movement():
 		if ant_loc not in self.ants.my_ants():
 			return False
 		moved_ant = False
-		for direction in ('s','e','w','n'):
+		for direction in ('s', 'w', 'e', 'n'):
 			moved_ant = self.do_move_direction(ant_loc, direction)
 			if moved_ant:
 				return True
 		if (not moved_ant):
 			(r,c) = ant_loc
+			#south
 			if self.shift_ant((r+1,c)):
 				return True
+			#est
 			elif self.shift_ant((r,c+1)):
 				return True
-			if self.shift_ant((r-1,c)):
+			#west
+			elif self.shift_ant((r-1,c)):
 				return True
-			elif self.shift_ant((r,c-1)):
+			#north
+			if self.shift_ant((r,c-1)):
 				return True
 			return False
