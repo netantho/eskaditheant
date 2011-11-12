@@ -54,7 +54,11 @@ class Movement():
 		#directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
 		(locr, locc) = loc
 		(destr, destc) = dest
-		directions = self.pathfinding.coordinates_to_directions(self.pathfinding.astar(locr, locc, destr, destc))
+		pathfinding = self.pathfinding.astar(locr, locc, destr, destc)
+		if (not pathfinding):
+			variables.targets[dest] = None
+			return False
+		directions = self.pathfinding.coordinates_to_directions(pathfinding)
 		logging.debug("directions")
 		logging.debug(directions)
 		for direction in directions:
@@ -81,16 +85,16 @@ class Movement():
 				return True
 		if (not moved_ant):
 			(r,c) = ant_loc
-			#south
+			# south
 			if self.shift_ant((r+1,c)):
 				return True
-			#est
+			# east
 			elif self.shift_ant((r,c+1)):
 				return True
-			#west
+			# north
 			elif self.shift_ant((r-1,c)):
 				return True
-			#north
+			# west
 			if self.shift_ant((r,c-1)):
 				return True
 			return False

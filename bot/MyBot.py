@@ -96,6 +96,7 @@ class MyBot:
 
 if __name__ == '__main__':
 	# psyco will speed up python a little, but is not needed
+	# be aware that psyco is currently unavailable for python >= 2.7
 	try:
 		import psyco
 		psyco.full()

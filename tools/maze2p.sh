@@ -1,0 +1,1 @@
+python playgame.py "python ../bot/MyBot.py" "python sample_bots/python/HunterBot.py" --map_file maps/maze/maze_02p_01.map --loadtime 2000 --turntime 400 --log_dir game_logs --turns 350 --food symmetric --player_seed 7 --verbose --log_error  -e
