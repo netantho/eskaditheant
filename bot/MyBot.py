@@ -13,9 +13,8 @@ from food import Food
 from attack import Attack
 from defence import Defence
 from pathfinding import Pathfinding
+from log import Log
 
-import os
-from datetime import date
 import time
 import logging
 
@@ -34,13 +33,7 @@ class MyBot:
 		
 		\param self
 		"""
-		log_file = 'logs/bot'+str(date.today())+'_'
-		i=0
-		while os.path.exists(log_file+str(i)+'.log'):
-			i+=1
-
-		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(i)+'.log',level=logging.DEBUG)
-		pass
+		self.log = Log()
 	
 	def do_setup(self, ants):
 		"""
@@ -71,6 +64,9 @@ class MyBot:
 		\param object instance of the ants class
 		"""
 		
+		# logging start of the turn
+		logging.debug("Turn "+str(ants.turn_current))
+		
 		# clean the mess of the old turns
 		variables.orders = {}
 		variables.targets = {}
@@ -92,6 +88,9 @@ class MyBot:
 		self.exploration.remove_seen()
 		self.exploration.explore()
 		self.defence.unblock_own_hill_complex()
+		
+		# logging end of the turn
+		logging.debug("Turn "+str(ants.turn_current)+" finished with "+str(ants.time_remaining())+" time remaining")
 
 
 if __name__ == '__main__':
