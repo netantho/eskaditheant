@@ -40,7 +40,7 @@ class Movement():
 		else:
 			return False
 	
-	def do_move_location(self, loc, dest):
+	def do_move_location(self, loc, dest, cat=None):
 		"""
 		Simulate a manhattan pathfinding for food and issue the order if the destination is possible
 		
