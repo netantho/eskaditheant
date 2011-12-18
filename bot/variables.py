@@ -17,6 +17,8 @@ pathfinding = {}
 # configuration  #
 ##################
 
+log_enabled = 1
+
 move_attempts = 2
 
 idle_time_remaining = 0
