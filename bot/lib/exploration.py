@@ -56,11 +56,16 @@ class Exploration():
 						unseen_dist.append((dist, unseen_loc))
 				unseen_dist.sort()
 				# give orders to explore
+				attempts = 0
 				for dist, unseen_loc in unseen_dist:
 					if self.movement.do_move_location(ant_loc, unseen_loc):
 						#logging.debug("Exploration, from ... to ...")
 						#logging.debug(ant_loc)
 						#logging.debug(unseen_loc)
 						break
+					elif attempts >= variables.move_attempts:
+						logging.debug("explore: "+str(ant_loc)+" ant's attempts to explore reached")
+						break
 					else:
+						attempts += 1
 						random.shuffle(unseen_dist)
