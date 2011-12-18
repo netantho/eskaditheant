@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath('../'))
 import variables
 
 import logging
+import random
 
 class Exploration():
 	def __init__(self, ants, movement):
@@ -61,3 +62,5 @@ class Exploration():
 						#logging.debug(ant_loc)
 						#logging.debug(unseen_loc)
 						break
+					else:
+						random.shuffle(unseen_dist)
