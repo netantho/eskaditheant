@@ -1,11 +1,10 @@
 from datetime import date
 import os
-import logging
 
 class Log:
-	def __init__(self):
+	def get_available_revision(self):
 		"""
-		Open log file
+		Get the number of the first available revision of the log file
 		
 		\param self
 		"""
@@ -13,5 +12,4 @@ class Log:
 		i=0
 		while os.path.exists(log_file+str(i)+'.log'):
 			i+=1
-
-		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(i)+'.log',level=logging.DEBUG)
+		return i

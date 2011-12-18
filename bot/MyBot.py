@@ -4,6 +4,7 @@ from ants import *
 import sys
 import time
 import logging
+from datetime import date
 
 import lib
 import variables
@@ -24,6 +25,7 @@ class MyBot:
 		\param self
 		"""
 		self.log = lib.log.Log()
+		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
 	
 	def do_setup(self, ants):
 		"""
