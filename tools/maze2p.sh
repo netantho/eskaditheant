@@ -1,0 +1,2 @@
+ARGS="--map_file maps/maze/maze_02p_02.map --loadtime 2000 --turntime 400 --log_dir game_logs --turns 350 --food symmetric --player_seed 7 --verbose --log_error  -e"
+python playgame.py "python ../bot/MyBot.py $(cat maze2p.sh)" "python sample_bots/python/HunterBot.py" $ARGS

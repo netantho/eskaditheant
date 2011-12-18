@@ -53,6 +53,7 @@ class Ants():
         self.attackradius2 = 0
         self.spawnradius2 = 0
         self.turns = 0
+        self.turn_current = 0
 
     def setup(self, data):
         'parse initial input and setup starting game state'
@@ -79,16 +80,19 @@ class Ants():
                     self.spawnradius2 = int(tokens[1])
                 elif key == 'turns':
                     self.turns = int(tokens[1])
-        self.map = [[LAND for col in range(self.cols)]
-                    for row in range(self.rows)]
+        self.map = [[LAND for col in xrange(self.cols)]
+                    for row in xrange(self.rows)]
 
     def update(self, data):
         'parse engine input and update the game state'
         # start timer
-        self.turn_start_time = time.clock()
+        self.turn_start_time = time.time()
         
         # reset vision
         self.vision = None
+        
+        # update turn number
+        self.turn_current += 1
         
         # clear hill, ant and food data
         self.hill_list = {}
@@ -132,8 +136,8 @@ class Ants():
                             self.hill_list[(row, col)] = owner
                         
     def time_remaining(self):
-        return self.turntime - int(1000 * (time.clock() - self.turn_start_time))
-    
+        return self.turntime - int(1000 * (time.time() - self.turn_start_time))
+
     def issue_order(self, order):
         'issue an order by writing the proper ant location and direction'
         (row, col), direction = order
@@ -146,23 +150,23 @@ class Ants():
         sys.stdout.flush()
     
     def my_hills(self):
-        return [loc for loc, owner in self.hill_list.items()
-                    if owner == MY_ANT]
+        return (loc for loc, owner in self.hill_list.items()
+                    if owner == MY_ANT)
 
     def enemy_hills(self):
-        return [(loc, owner) for loc, owner in self.hill_list.items()
-                    if owner != MY_ANT]
+        return ((loc, owner) for loc, owner in self.hill_list.items()
+                    if owner != MY_ANT)
         
     def my_ants(self):
-        'return a list of all my ants'
-        return [(row, col) for (row, col), owner in self.ant_list.items()
-                    if owner == MY_ANT]
+        'return generators of all my ants'
+        return ((row, col) for (row, col), owner in self.ant_list.items()
+                    if owner == MY_ANT)
 
     def enemy_ants(self):
-        'return a list of all visible enemy ants'
-        return [((row, col), owner)
+        'return generators of all visible enemy ants'
+        return (((row, col), owner)
                     for (row, col), owner in self.ant_list.items()
-                    if owner != MY_ANT]
+                    if owner != MY_ANT)
 
     def food(self):
         'return a list of all food locations'
@@ -182,7 +186,7 @@ class Ants():
         'calculate a new location given the direction and wrap correctly'
         row, col = loc
         d_row, d_col = AIM[direction]
-        return ((row + d_row) % self.rows, (col + d_col) % self.cols)        
+        return ((row + d_row) % self.rows, (col + d_col) % self.cols)
 
     def distance(self, loc1, loc2):
         'calculate the closest distance between to locations'
@@ -198,28 +202,29 @@ class Ants():
         row2, col2 = loc2
         height2 = self.rows//2
         width2 = self.cols//2
-        d = []
         if row1 < row2:
             if row2 - row1 >= height2:
-                d.append('n')
+                yield 'n'
             if row2 - row1 <= height2:
-                d.append('s')
+                yield 's'
         if row2 < row1:
             if row1 - row2 >= height2:
-                d.append('s')
+                yield 's'
             if row1 - row2 <= height2:
-                d.append('n')
+                yield 'n'
         if col1 < col2:
             if col2 - col1 >= width2:
-                d.append('w')
+                yield 'w'
             if col2 - col1 <= width2:
-                d.append('e')
+                yield 'e'
         if col2 < col1:
             if col1 - col2 >= width2:
-                d.append('e')
+                yield 'e'
             if col1 - col2 <= width2:
-                d.append('w')
-        return d
+                yield 'w'
+
+	def get_map(self):
+		return self.map
 
     def visible(self, loc):
         ' determine which squares are visible to the given player '
@@ -229,8 +234,8 @@ class Ants():
                 # precalculate squares around an ant to set as visible
                 self.vision_offsets_2 = []
                 mx = int(sqrt(self.viewradius2))
-                for d_row in range(-mx,mx+1):
-                    for d_col in range(-mx,mx+1):
+                for d_row in xrange(-mx,mx+1):
+                    for d_col in xrange(-mx,mx+1):
                         d = d_row**2 + d_col**2
                         if d <= self.viewradius2:
                             self.vision_offsets_2.append((
@@ -239,7 +244,7 @@ class Ants():
                             ))
             # set all spaces as not visible
             # loop through ants and set all squares around ant as visible
-            self.vision = [[False]*self.cols for row in range(self.rows)]
+            self.vision = [[False]*self.cols for row in xrange(self.rows)]
             for ant in self.my_ants():
                 a_row, a_col = ant
                 for v_row, v_col in self.vision_offsets_2:
