@@ -47,26 +47,27 @@ class Exploration():
 		
 		\param self
 		"""
-		for ant_loc in self.ants.my_ants():
-			if ant_loc not in variables.orders.values():
-				unseen_dist = []
-				# store and sort distances of unexplored areas
-				for unseen_loc in self.unseen:
-					if unseen_loc not in variables.targets:
-						dist = self.ants.distance(ant_loc, unseen_loc)
-						unseen_dist.append((dist, unseen_loc))
-				unseen_dist.sort()
-				# give orders to explore
-				attempts = 0
-				for dist, unseen_loc in unseen_dist:
-					if self.movement.do_move_location(ant_loc, unseen_loc):
-						#logging.debug("Exploration, from ... to ...")
-						#logging.debug(ant_loc)
-						#logging.debug(unseen_loc)
-						break
-					elif attempts >= variables.move_attempts:
-						logging.debug("explore: "+str(ant_loc)+" ant's attempts to explore reached")
-						break
-					else:
-						attempts += 1
-						random.shuffle(unseen_dist)
+		if self.ants.time_remaining() > variables.idle_time_remaining:
+			for ant_loc in self.ants.my_ants():
+				if ant_loc not in variables.orders.values():
+					unseen_dist = []
+					# store and sort distances of unexplored areas
+					for unseen_loc in self.unseen:
+						if unseen_loc not in variables.targets:
+							dist = self.ants.distance(ant_loc, unseen_loc)
+							unseen_dist.append((dist, unseen_loc))
+					unseen_dist.sort()
+					# give orders to explore
+					attempts = 0
+					for dist, unseen_loc in unseen_dist:
+						if self.movement.do_move_location(ant_loc, unseen_loc):
+							#logging.debug("Exploration, from ... to ...")
+							#logging.debug(ant_loc)
+							#logging.debug(unseen_loc)
+							break
+						elif attempts >= variables.move_attempts and self.ants.time_remaining() > variables.idle_time_remaining:
+							logging.debug("explore: "+str(ant_loc)+" ant's attempts to explore reached")
+							break
+						else:
+							attempts += 1
+							random.shuffle(unseen_dist)

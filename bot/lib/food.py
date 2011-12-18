@@ -32,16 +32,17 @@ class Food():
 		
 		\param self
 		"""
-		# find close food
-		ant_dist = list(self.distance_food())
-		ant_dist.sort()
-		
-		# debug
-		#logging.debug(targets)
-		#logging.debug(ants.food())
-		
-		# give instructions to free ants to grab food
-		for dist, ant_loc, food_loc in ant_dist:
-			# assign an ant to grab food
-			if food_loc not in variables.targets.values() and ant_loc not in variables.targets.values():
-				self.movement.do_move_location(ant_loc, food_loc, 'food')
+		if self.ants.time_remaining() > variables.idle_time_remaining:
+			# find close food
+			ant_dist = list(self.distance_food())
+			ant_dist.sort()
+			
+			# debug
+			#logging.debug(targets)
+			#logging.debug(ants.food())
+			
+			# give instructions to free ants to grab food
+			for dist, ant_loc, food_loc in ant_dist:
+				# assign an ant to grab food
+				if food_loc not in variables.targets.values() and ant_loc not in variables.targets.values() and self.ants.time_remaining() > variables.idle_time_remaining:
+					self.movement.do_move_location(ant_loc, food_loc, 'food')

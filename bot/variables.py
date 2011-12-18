@@ -18,3 +18,7 @@ pathfinding = {}
 ##################
 
 move_attempts = 2
+
+idle_time_remaining = 0
+idle_time_ini = 0.25
+idle_time_per_ant = 3

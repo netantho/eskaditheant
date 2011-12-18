@@ -24,13 +24,14 @@ class Defence():
 		
 		\param self
 		"""
-		# unblock own hill
-		for hill_loc in self.ants.my_hills():
-			if hill_loc in self.ants.my_ants() and hill_loc not in variables.orders.values():
-				for direction in ('s','e','w','n'):
-					logging.debug(direction)
-					if self.movement.do_move_direction(hill_loc, direction):
-						break
+		if self.ants.time_remaining() > variables.idle_time_remaining:
+			# unblock own hill
+			for hill_loc in self.ants.my_hills():
+				if hill_loc in self.ants.my_ants() and hill_loc not in variables.orders.values():
+					for direction in ('s','e','w','n'):
+						logging.debug(direction)
+						if self.movement.do_move_direction(hill_loc, direction):
+							break
 	
 	def unblock_own_hill_complex(self):
 		"""
@@ -38,7 +39,8 @@ class Defence():
 		
 		\param self
 		"""
-		# unblock own hill
-		for hill_loc in self.ants.my_hills():
-			if hill_loc in self.ants.my_ants() and hill_loc not in variables.orders.values():
-				self.movement.shift_ant(hill_loc)
+		if self.ants.time_remaining() > variables.idle_time_remaining:
+			# unblock own hill
+			for hill_loc in self.ants.my_hills():
+				if hill_loc in self.ants.my_ants() and hill_loc not in variables.orders.values():
+					self.movement.shift_ant(hill_loc)

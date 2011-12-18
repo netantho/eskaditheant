@@ -63,6 +63,8 @@ class MyBot:
 		\param object instance of the ants class
 		"""
 		
+		variables.idle_time_remaining = variables.idle_time_ini * ants.turntime + len(list(ants.my_ants())) * variables.idle_time_per_ant
+		
 		# logging start of the turn
 		logging.debug("Turn "+str(ants.turn_current))
 		
@@ -89,7 +91,7 @@ class MyBot:
 		self.defence.unblock_own_hill_complex()
 		
 		# logging end of the turn
-		logging.debug("Turn "+str(ants.turn_current)+" finished with "+str(ants.time_remaining())+" time remaining")
+		logging.debug("Turn "+str(ants.turn_current)+" finished with "+str(ants.time_remaining())+" time remaining\n")
 
 
 if __name__ == '__main__':

@@ -36,13 +36,14 @@ class Attack():
 		\param list of (r,c) ennemies' hills
 		"""
 		# compute the distances to the hills and sort it
-		ant_dist = []
-		for hill_loc in hills:
-			for ant_loc in self.ants.my_ants():
-				if ant_loc not in variables.orders.values():
-					dist = self.ants.distance(ant_loc, hill_loc)
-					ant_dist.append((dist, ant_loc))
-		ant_dist.sort()
-		# give orders to attack the ennemy's hills
-		for dist, ant_loc in ant_dist:
-			self.movement.do_move_location(ant_loc, hill_loc)
+		if self.ants.time_remaining() > variables.idle_time_remaining:
+			ant_dist = []
+			for hill_loc in hills:
+				for ant_loc in self.ants.my_ants():
+					if ant_loc not in variables.orders.values():
+						dist = self.ants.distance(ant_loc, hill_loc)
+						ant_dist.append((dist, ant_loc))
+			ant_dist.sort()
+			# give orders to attack the ennemy's hills
+			for dist, ant_loc in ant_dist:
+				self.movement.do_move_location(ant_loc, hill_loc)
