@@ -11,3 +11,10 @@ orders = {}
 targets = {}
 
 pathfinding = {}
+
+
+##################
+# configuration  #
+##################
+
+move_attempts = 2
