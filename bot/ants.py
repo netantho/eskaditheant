@@ -150,23 +150,23 @@ class Ants():
         sys.stdout.flush()
     
     def my_hills(self):
-        return [loc for loc, owner in self.hill_list.items()
-                    if owner == MY_ANT]
+        return (loc for loc, owner in self.hill_list.items()
+                    if owner == MY_ANT)
 
     def enemy_hills(self):
-        return [(loc, owner) for loc, owner in self.hill_list.items()
-                    if owner != MY_ANT]
+        return ((loc, owner) for loc, owner in self.hill_list.items()
+                    if owner != MY_ANT)
         
     def my_ants(self):
-        'return a list of all my ants'
-        return [(row, col) for (row, col), owner in self.ant_list.items()
-                    if owner == MY_ANT]
+        'return generators of all my ants'
+        return ((row, col) for (row, col), owner in self.ant_list.items()
+                    if owner == MY_ANT)
 
     def enemy_ants(self):
-        'return a list of all visible enemy ants'
-        return [((row, col), owner)
+        'return generators of all visible enemy ants'
+        return (((row, col), owner)
                     for (row, col), owner in self.ant_list.items()
-                    if owner != MY_ANT]
+                    if owner != MY_ANT)
 
     def food(self):
         'return a list of all food locations'
@@ -186,7 +186,7 @@ class Ants():
         'calculate a new location given the direction and wrap correctly'
         row, col = loc
         d_row, d_col = AIM[direction]
-        return ((row + d_row) % self.rows, (col + d_col) % self.cols)        
+        return ((row + d_row) % self.rows, (col + d_col) % self.cols)
 
     def distance(self, loc1, loc2):
         'calculate the closest distance between to locations'
@@ -202,28 +202,26 @@ class Ants():
         row2, col2 = loc2
         height2 = self.rows//2
         width2 = self.cols//2
-        d = []
         if row1 < row2:
             if row2 - row1 >= height2:
-                d.append('n')
+                yield 'n'
             if row2 - row1 <= height2:
-                d.append('s')
+                yield 's'
         if row2 < row1:
             if row1 - row2 >= height2:
-                d.append('s')
+                yield 's'
             if row1 - row2 <= height2:
-                d.append('n')
+                yield 'n'
         if col1 < col2:
             if col2 - col1 >= width2:
-                d.append('w')
+                yield 'w'
             if col2 - col1 <= width2:
-                d.append('e')
+                yield 'e'
         if col2 < col1:
             if col1 - col2 >= width2:
-                d.append('e')
+                yield 'e'
             if col1 - col2 <= width2:
-                d.append('w')
-        return d
+                yield 'w'
 
 	def get_map(self):
 		return self.map

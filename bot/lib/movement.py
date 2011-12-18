@@ -60,42 +60,29 @@ class Movement():
 				variables.targets[dest] = None
 				return False
 				
-			variables.pathfinding[loc, dest] = self.pathfinding.coordinates_to_directions(pathfinding)
+			variables.pathfinding[loc, dest] = list(self.pathfinding.coordinates_to_directions(pathfinding))
+		
+		if not variables.pathfinding[loc, dest]:
+			return False
 		
 		direction = variables.pathfinding[loc, dest].pop(0)
-		variables.pathfinding[self.direction_to_coordinate(loc, direction), dest] = variables.pathfinding[loc, dest]
+		variables.pathfinding[self.ants.destination(loc, direction), dest] = variables.pathfinding[loc, dest]
 		del variables.pathfinding[loc, dest]
 		
-		dest_loc = self.direction_to_coordinate(loc, direction)
+		dest_loc = self.ants.destination(loc, direction)
 
 		if self.do_move_direction(loc, direction):
+			if cat == 'food':
+				variables.targets[direction] = loc
 			return True
 		elif dest_loc in self.ants.my_ants() and self.shift_ant(dest_loc) and self.do_move_direction(loc, direction):
+			if cat == 'food':
+				variables.targets[direction] = loc
 			return True
 		
 		logging.error("do_move_location stuck from "+str(loc)+", wants to go "+direction)
 		logging.error("do_move_location from "+str(loc)+" to "+str(dest)+" impossible")
 		variables.targets[dest] = None
-		return False
-	
-	def direction_to_coordinate(self, loc, direction):
-		""""
-		Converts an initial location and a direction into a new location
-		
-		\param tuple (r,c) initial location
-		\param string n|s|e|w direction
-		\return tuple (r,c) resulting location
-		"""
-		(r,c) = loc
-		if direction == "n":
-			return (r-1 % self.ants.rows,c)
-		elif direction == "s":
-			return (r+1 % self.ants.rows,c)
-		elif direction == "w":
-			return (r,c-1 % self.ants.cols)
-		elif direction == "e":
-			return (r,c+1 % self.ants.cols)
-		logging.error("direction_to_coordinate invalid direction "+direction)
 		return False
 	
 	def shift_ant(self, ant_move_loc):

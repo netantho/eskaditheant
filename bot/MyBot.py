@@ -25,6 +25,7 @@ class MyBot:
 		
 		\param self
 		"""
+		
 		self.log = lib.log.Log()
 		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
 		logging.debug("Args: "+str(sys.argv))
@@ -52,7 +53,7 @@ class MyBot:
 		self.exploration = lib.exploration.Exploration(ants, self.movement)
 
 		# store unexplored locations
-		self.exploration.generate_unseen()
+		self.exploration.unseen = list(self.exploration.generate_unseen())
 	
 	def do_turn(self, ants):
 		"""
@@ -81,7 +82,7 @@ class MyBot:
 
 		self.orders.prevent_stepping_hill()
 		self.food.grab_visible_food()
-		self.hills = self.attack.save_enemy_hills(self.hills)
+		self.hills = list(self.attack.save_enemy_hills(self.hills))
 		self.attack.attack_hills(self.hills)
 		self.exploration.remove_seen()
 		self.exploration.explore()

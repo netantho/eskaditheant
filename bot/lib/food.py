@@ -15,6 +15,17 @@ class Food():
 		self.ants = ants
 		self.movement = movement
 
+	def distance_food(self):
+		"""
+		Generators to get the distance between ant locations and food locations
+		
+		\param self
+		"""
+		for food_loc in self.ants.food():
+			for ant_loc in self.ants.my_ants():
+				dist = self.ants.distance(ant_loc, food_loc)
+				yield (dist, ant_loc, food_loc)
+
 	def grab_visible_food(self):
 		"""
 		Calculate distances between ants and food and give orders to grab
@@ -22,11 +33,7 @@ class Food():
 		\param self
 		"""
 		# find close food
-		ant_dist = []
-		for food_loc in self.ants.food():
-			for ant_loc in self.ants.my_ants():
-				dist = self.ants.distance(ant_loc, food_loc)
-				ant_dist.append((dist, ant_loc, food_loc))
+		ant_dist = list(self.distance_food())
 		ant_dist.sort()
 		
 		# debug

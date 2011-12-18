@@ -26,8 +26,7 @@ class Attack():
 		"""
 		for hill_loc, hill_owner in self.ants.enemy_hills():
 			if hill_loc not in hills:
-				hills.append(hill_loc)
-		return hills
+				yield hill_loc
 		
 	def attack_hills(self, hills):
 		"""

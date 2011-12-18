@@ -22,13 +22,14 @@ class Exploration():
 	
 	def generate_unseen(self):
 		"""
-		Append couples of the unexplored tiles to self.unseen
+		Couples of the unexplored tiles
 		
 		\param self
+		\return generator of the unseen tiles
 		"""
 		for row in xrange(self.ants.rows):
 			for col in xrange(self.ants.cols):
-				self.unseen.append((row, col))
+				yield (row, col)
 	
 	def remove_seen(self):
 		"""

@@ -26,21 +26,21 @@ class Pathfinding():
 		\param self
 		\param int row of the initial tile
 		\param int col of the initial tile
-		\return array array of the coordinates of the neighbours
+		\return generators of the coordinates of the neighbours
 		"""
-		result = []
+
 		# south
 		if (rc+1 < self.ants.rows and self.ants.map[rc+1][cc] != -4):
-			result.append((rc+1, cc))
+			yield (rc+1, cc)
 		# east
 		if (rc > 0  and self.ants.map[rc-1][cc] != -4):
-			result.append((rc-1, cc))
+			yield (rc-1, cc)
 		# north
 		if (cc+1 < self.ants.cols and self.ants.map[rc][cc+1] != -4):
-			result.append((rc, cc+1))
+			yield (rc, cc+1)
 		# west
-		if (cc > 0 and self.ants.map[rc][cc-1 ] != -4):
-			result.append((rc, cc-1))
+		if (cc > 0 and self.ants.map[rc][cc-1] != -4):
+			yield (rc, cc-1)
 		#if (self.ants.map[rc+1 % self.ants.rows][cc] != -4):
 			#result.append((rc+1 % self.ants.rows, cc))
 		#if (self.ants.map[rc-1 % self.ants.rows][cc] != -4):
@@ -49,7 +49,6 @@ class Pathfinding():
 			#result.append((rc, cc+1 % self.ants.cols))
 		#if (self.ants.map[rc][cc-1 % self.ants.cols] != -4):
 			#result.append((rc, cc-1 % self.ants.cols))
-		return result
 
 	def astar(self, start_r, start_c, goal_r, goal_c):
 		"""
@@ -60,25 +59,25 @@ class Pathfinding():
 		\param int col of the start tile
 		\param int row of the goal tile
 		\param int col of the goal tile
-		\return array path with coordinates of the tiles
+		\return list path with coordinates of the tiles
 		"""
 		def initialize_map():
-			tab = []
-			for r in xrange(self.ants.rows):
-				tab.append([])
+			def initialize_row():
 				for c in xrange(self.ants.cols):
-					tab[r].append(None)
-			return tab
+					yield None
+			
+			for r in xrange(self.ants.rows):
+				yield list(initialize_row())
 		
 		#Pseudocode from Wikipedia
 		closedset = set()
 		openset = set()
 		openset.add((start_r, start_c))
-		came_from = initialize_map() #map of the navigated nodes
+		came_from = list(initialize_map()) #map of the navigated nodes
 		
-		g_score = initialize_map()
-		h_score = initialize_map()
-		f_score = initialize_map()
+		g_score = list(initialize_map())
+		h_score = list(initialize_map())
+		f_score = list(initialize_map())
 		g_score[start_r][start_c] = 0
 		h_score[start_r][start_c] = self.ants.distance((start_r, start_c), (goal_r, goal_c))
 		f_score[start_r][start_c] = g_score[start_r][start_c] + h_score[start_r][start_c]
@@ -87,7 +86,7 @@ class Pathfinding():
 			(xr, xc) = sorted(openset, key=lambda (xr,xc): f_score[xr][xc])[0]
 			if (xr, xc) == (goal_r, goal_c):
 				path_return = self.astar_reconstruct_path(came_from, came_from[goal_r][goal_c])
-				logging.debug("A* path : "+str(path_return))
+				#logging.debug("A* path : "+str(path_return))
 				return path_return
 			openset.remove((xr, xc))
 			closedset.add((xr, xc))
@@ -185,19 +184,17 @@ class Pathfinding():
 	
 	def coordinates_to_directions(self, coordinates):
 		(rc,cc) = coordinates[0]
-		result = []
 		#coordinates = coordinates[1:len(coordinates)-1]
 		coordinates = coordinates[1:]
 		#logging.debug(len(coordinates))
 		for (rn,cn) in coordinates:
 			#logging.debug((rn,cn))
 			if (rn,cn) == (rc-1,cc):
-				result.append('n')
+				yield 'n'
 			elif (rn,cn) == (rc+1,cc):
-				result.append('s')
+				yield 's'
 			elif (rn,cn) == (rc,cc-1):
-				result.append('w')
+				yield 'w'
 			elif (rn,cn) == (rc,cc+1):
-				result.append('e')
+				yield 'e'
 			(rc,cc)=(rn,cn)
-		return result
