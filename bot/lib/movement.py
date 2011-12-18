@@ -31,7 +31,7 @@ class Movement():
 		new_loc = self.ants.destination(loc, direction)
 		# unoccupied : without food or ant
 		# We don't want to go where another ant has already gone, and not the last location
-		if (self.ants.unoccupied(new_loc) and (new_loc not in variables.orders)):
+		if (self.ants.unoccupied(new_loc) and (new_loc not in variables.orders) and (loc not in variables.orders.values())):
 			# Go !
 			self.ants.issue_order((loc, direction))
 			# Save the order
@@ -54,7 +54,7 @@ class Movement():
 		#directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
 		(locr, locc) = loc
 		(destr, destc) = dest
-		if (not variables.pathfinding.has_key((loc, dest))):
+		if ((loc, dest) not in variables.pathfinding):
 			pathfinding = self.pathfinding.astar(locr, locc, destr, destc)
 			if (not pathfinding):
 				variables.targets[dest] = None
@@ -65,27 +65,15 @@ class Movement():
 		direction = variables.pathfinding[loc, dest].pop(0)
 		variables.pathfinding[self.direction_to_coordinate(loc, direction), dest] = variables.pathfinding[loc, dest]
 		del variables.pathfinding[loc, dest]
+		
+		dest_loc = self.direction_to_coordinate(loc, direction)
 
-		
-		#directions = self.pathfinding.coordinates_to_directions(pathfinding)
-		#logging.debug("directions")
-		#logging.debug(directions)
-		#for direction in directions:
-			#if self.do_move_direction(loc, direction):
-				#variables.targets[dest] = loc
-				#return True
-			##Bug duplicate order
-			#elif self.shift_ant(self.direction_to_coordinate(loc, direction)):
-				#return True
-		
 		if self.do_move_direction(loc, direction):
-			variables.targets[dest] = loc
 			return True
-		elif loc in self.ants.my_ants() and self.shift_ant(self.direction_to_coordinate(loc, direction)):
+		elif dest_loc in self.ants.my_ants() and self.shift_ant(dest_loc) and self.do_move_direction(loc, direction):
 			return True
-		else:
-			logging.error("do_move_location stuck from "+str(loc)+", wants to go "+direction)
 		
+		logging.error("do_move_location stuck from "+str(loc)+", wants to go "+direction)
 		logging.error("do_move_location from "+str(loc)+" to "+str(dest)+" impossible")
 		variables.targets[dest] = None
 		return False
@@ -100,46 +88,32 @@ class Movement():
 		"""
 		(r,c) = loc
 		if direction == "n":
-			return (r-1,c)
+			return (r-1 % self.ants.rows,c)
 		elif direction == "s":
-			return (r+1,c)
+			return (r+1 % self.ants.rows,c)
 		elif direction == "w":
-			return (r,c-1)
+			return (r,c-1 % self.ants.cols)
 		elif direction == "e":
-			return (r,c+1)
+			return (r,c+1 % self.ants.cols)
 		logging.error("direction_to_coordinate invalid direction "+direction)
 		return False
 	
-	def shift_ant(self, ant_loc):
+	def shift_ant(self, ant_move_loc):
 		"""
-		Recursive method to shift an ant from one tile and shift others to do so if necessary
+		Shift an ant from one tile and shift others to do so if necessary, only depth = 0
+		TODO: Make it for depth >= 0
 		
 		\param self
-		\param tuple (r,c) location of the ant to shift
+		\param (r,c) location of the ant to shift
 		\return bool True if success, False is failure
 		"""
-		# invalid ant
-		if ant_loc not in self.ants.my_ants():
-			logging.error("Failed to shift the ant on "+str(ant_loc)+": no ant there")
-			return False
-		moved_ant = False
-		for direction in ('s', 'w', 'e', 'n'):
-			moved_ant = self.do_move_direction(ant_loc, direction)
-			if moved_ant:
+		# If useless to use shift_ant
+		if ant_move_loc not in self.ants.my_ants():
+			return True
+
+		for direction in ('n', 'e', 's', 'w'):
+			if self.do_move_direction(ant_move_loc, direction):
 				return True
-		if (not moved_ant):
-			(r,c) = ant_loc
-			# south
-			if (r+1,c) in self.ants.my_ants() and self.shift_ant((r+1,c)):
-				return True
-			# east
-			elif (r,c+1) in self.ants.my_ants() and self.shift_ant((r,c+1)):
-				return True
-			# north
-			elif (r-1,c) in self.ants.my_ants() and self.shift_ant((r-1,c)):
-				return True
-			# west
-			elif (r,c-1) in self.ants.my_ants() and self.shift_ant((r,c-1)):
-				return True
-			logging.error("Fail to shift the ant on "+str(ant_loc)+": no free space")
-			return False
+		
+		logging.debug("shift_ant: no immediate free space to move "+str(ant_move_loc)) 
+		return False
