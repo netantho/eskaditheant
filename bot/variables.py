@@ -9,3 +9,5 @@
 orders = {}
 # targets for the turn, location of the target food as the key, location of the assigned ant as the value
 targets = {}
+
+pathfinding = {}

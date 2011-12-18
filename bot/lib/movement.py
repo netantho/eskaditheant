@@ -54,19 +54,60 @@ class Movement():
 		#directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
 		(locr, locc) = loc
 		(destr, destc) = dest
-		pathfinding = self.pathfinding.astar(locr, locc, destr, destc)
-		if (not pathfinding):
-			variables.targets[dest] = None
-			return False
-		directions = self.pathfinding.coordinates_to_directions(pathfinding)
-		logging.debug("directions")
-		logging.debug(directions)
-		for direction in directions:
-			if self.do_move_direction(loc, direction):
-				variables.targets[dest] = loc
-				return True
-		logging.debug("do_move_location false")
+		if (not variables.pathfinding.has_key((loc, dest))):
+			pathfinding = self.pathfinding.astar(locr, locc, destr, destc)
+			if (not pathfinding):
+				variables.targets[dest] = None
+				return False
+				
+			variables.pathfinding[loc, dest] = self.pathfinding.coordinates_to_directions(pathfinding)
+		
+		direction = variables.pathfinding[loc, dest].pop(0)
+		variables.pathfinding[self.direction_to_coordinate(loc, direction), dest] = variables.pathfinding[loc, dest]
+		del variables.pathfinding[loc, dest]
+
+		
+		#directions = self.pathfinding.coordinates_to_directions(pathfinding)
+		#logging.debug("directions")
+		#logging.debug(directions)
+		#for direction in directions:
+			#if self.do_move_direction(loc, direction):
+				#variables.targets[dest] = loc
+				#return True
+			##Bug duplicate order
+			#elif self.shift_ant(self.direction_to_coordinate(loc, direction)):
+				#return True
+		
+		if self.do_move_direction(loc, direction):
+			variables.targets[dest] = loc
+			return True
+		elif loc in self.ants.my_ants() and self.shift_ant(self.direction_to_coordinate(loc, direction)):
+			return True
+		else:
+			logging.error("do_move_location stuck from "+str(loc)+", wants to go "+direction)
+		
+		logging.error("do_move_location from "+str(loc)+" to "+str(dest)+" impossible")
 		variables.targets[dest] = None
+		return False
+	
+	def direction_to_coordinate(self, loc, direction):
+		""""
+		Converts an initial location and a direction into a new location
+		
+		\param tuple (r,c) initial location
+		\param string n|s|e|w direction
+		\return tuple (r,c) resulting location
+		"""
+		(r,c) = loc
+		if direction == "n":
+			return (r-1,c)
+		elif direction == "s":
+			return (r+1,c)
+		elif direction == "w":
+			return (r,c-1)
+		elif direction == "e":
+			return (r,c+1)
+		logging.error("direction_to_coordinate invalid direction "+direction)
 		return False
 	
 	def shift_ant(self, ant_loc):
@@ -74,9 +115,12 @@ class Movement():
 		Recursive method to shift an ant from one tile and shift others to do so if necessary
 		
 		\param self
+		\param tuple (r,c) location of the ant to shift
+		\return bool True if success, False is failure
 		"""
 		# invalid ant
 		if ant_loc not in self.ants.my_ants():
+			logging.error("Failed to shift the ant on "+str(ant_loc)+": no ant there")
 			return False
 		moved_ant = False
 		for direction in ('s', 'w', 'e', 'n'):
@@ -86,15 +130,16 @@ class Movement():
 		if (not moved_ant):
 			(r,c) = ant_loc
 			# south
-			if self.shift_ant((r+1,c)):
+			if (r+1,c) in self.ants.my_ants() and self.shift_ant((r+1,c)):
 				return True
 			# east
-			elif self.shift_ant((r,c+1)):
+			elif (r,c+1) in self.ants.my_ants() and self.shift_ant((r,c+1)):
 				return True
 			# north
-			elif self.shift_ant((r-1,c)):
+			elif (r-1,c) in self.ants.my_ants() and self.shift_ant((r-1,c)):
 				return True
 			# west
-			if self.shift_ant((r,c-1)):
+			elif (r,c-1) in self.ants.my_ants() and self.shift_ant((r,c-1)):
 				return True
+			logging.error("Fail to shift the ant on "+str(ant_loc)+": no free space")
 			return False
