@@ -2,18 +2,10 @@
 from ants import *
 
 import sys
-sys.path.append("lib")
 
+
+import lib
 import variables
-
-from exploration import Exploration
-from movement import Movement
-from orders import Orders
-from food import Food
-from attack import Attack
-from defence import Defence
-from pathfinding import Pathfinding
-from log import Log
 
 import time
 import logging
@@ -33,7 +25,7 @@ class MyBot:
 		
 		\param self
 		"""
-		self.log = Log()
+		self.log = lib.log.Log()
 	
 	def do_setup(self, ants):
 		"""
@@ -44,17 +36,21 @@ class MyBot:
 		"""
 		# initialize data structures after learning the game settings
 		self.hills = []
-		self.orders = Orders(ants)
-		self.pathfinding = Pathfinding(ants)
+
+		self.orders = lib.orders.Orders(ants)
+		self.pathfinding = lib.pathfinding.Pathfinding(ants)
+		
+		# generate the graph of the map
 		self.graph = self.pathfinding.generate_graph()
-		self.movement = Movement(ants, self.pathfinding, self.graph)
-		self.food = Food(ants, self.movement)
-		self.attack = Attack(ants, self.movement)
-		self.defence = Defence(ants, self.movement)
-		self.exploration = Exploration(ants, self.movement)
+		
+		self.movement = lib.movement.Movement(ants, self.pathfinding, self.graph)
+		self.food = lib.food.Food(ants, self.movement)
+		self.attack = lib.attack.Attack(ants, self.movement)
+		self.defence = lib.defence.Defence(ants, self.movement)
+		self.exploration = lib.exploration.Exploration(ants, self.movement)
+
 		# store unexplored locations
 		self.exploration.generate_unseen()
-		# create map's graph
 	
 	def do_turn(self, ants):
 		"""
