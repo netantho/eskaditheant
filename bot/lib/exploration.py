@@ -25,8 +25,8 @@ class Exploration():
 		
 		\param self
 		"""
-		for row in range(self.ants.rows):
-			for col in range(self.ants.cols):
+		for row in xrange(self.ants.rows):
+			for col in xrange(self.ants.cols):
 				self.unseen.append((row, col))
 	
 	def remove_seen(self):

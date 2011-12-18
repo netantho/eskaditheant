@@ -64,9 +64,9 @@ class Pathfinding():
 		"""
 		def initialize_map():
 			tab = []
-			for r in range(self.ants.rows):
+			for r in xrange(self.ants.rows):
 				tab.append([])
-				for c in range(self.ants.cols):
+				for c in xrange(self.ants.cols):
 					tab[r].append(None)
 			return tab
 		
@@ -153,9 +153,9 @@ class Pathfinding():
 		return []
 
 	def print_hash(self, my_hash, rows, cols):
-		for r in range(rows):
+		for r in xrange(rows):
 			pr = ""
-			for c in range(cols):
+			for c in xrange(cols):
 				if my_hash.has_key((r, c)):
 					pr += str(my_hash[(r,c)])+" "
 				else:
@@ -163,8 +163,8 @@ class Pathfinding():
 			logging.debug(pr)
 			
 	def print_hash_graph(self, my_hash, rows, cols):
-		for r in range(rows):
-			for c in range(cols):
+		for r in xrange(rows):
+			for c in xrange(cols):
 				pr = ""
 				if my_hash.has_key((r, c)):
 					pr += str((r, c))+": "+str(my_hash[(r,c)])
@@ -174,8 +174,8 @@ class Pathfinding():
 			
 	def generate_graph(self):
 		graph = {}
-		for rc in range(self.ants.rows):
-			for cc in range(self.ants.cols):
+		for rc in xrange(self.ants.rows):
+			for cc in xrange(self.ants.cols):
 				graph[(rc,cc)] = []
 				for (r,c) in self.adjacents(rc, cc):
 					if self.ants.map[r][c] != -4:

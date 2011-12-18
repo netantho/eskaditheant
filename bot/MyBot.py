@@ -2,13 +2,11 @@
 from ants import *
 
 import sys
-
+import time
+import logging
 
 import lib
 import variables
-
-import time
-import logging
 
 # define a class with a do_turn method
 # the Ants.run method will parse and update bot input
