@@ -17,10 +17,10 @@ pathfinding = {}
 # configuration  #
 ##################
 
-log_enabled = 1
+log_enabled = 0
 
 move_attempts = 2
 
 idle_time_remaining = 0
-idle_time_ini = 0.25
-idle_time_per_ant = 3
+idle_time_ini = 0.20
+idle_time_per_ant = 2
