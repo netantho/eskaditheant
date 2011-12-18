@@ -8,6 +8,7 @@ from datetime import date
 
 import lib
 import variables
+import sys
 
 # define a class with a do_turn method
 # the Ants.run method will parse and update bot input
@@ -26,6 +27,7 @@ class MyBot:
 		"""
 		self.log = lib.log.Log()
 		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
+		logging.debug("Args: "+str(sys.argv))
 	
 	def do_setup(self, ants):
 		"""
