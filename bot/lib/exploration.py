@@ -29,7 +29,8 @@ class Exploration():
 		"""
 		for row in xrange(self.ants.rows):
 			for col in xrange(self.ants.cols):
-				yield (row, col)
+				if self.ants.passable((row,col)):
+					yield (row, col)
 	
 	def remove_seen(self):
 		"""
@@ -38,8 +39,16 @@ class Exploration():
 		\param self
 		"""
 		for loc in self.unseen[:]: # : to make sure this list is different from the one we are deleting from
-			if self.ants.visible(loc):
+			if self.ants.visible(loc) or self.ants or not self.ants.passable(loc):
 				self.unseen.remove(loc)
+	
+	def refresh(self):
+		"""
+		Refresh the tiles to be explored
+		
+		\param self
+		"""
+		pass
 	
 	def explore(self):
 		"""

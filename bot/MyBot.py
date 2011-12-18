@@ -26,8 +26,9 @@ class MyBot:
 		\param self
 		"""
 		
-		self.log = lib.log.Log()
-		logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
+		if variables.log_enabled:
+			self.log = lib.log.Log()
+			logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
 		logging.debug("Args: "+str(sys.argv))
 	
 	def do_setup(self, ants):
@@ -66,7 +67,7 @@ class MyBot:
 		variables.idle_time_remaining = variables.idle_time_ini * ants.turntime + len(list(ants.my_ants())) * variables.idle_time_per_ant
 		
 		# logging start of the turn
-		logging.debug("Turn "+str(ants.turn_current))
+		logging.debug("Turn "+str(ants.turn_current)+" idle_time_remaining: "+str(variables.idle_time_remaining))
 		
 		# clean the mess of the old turns
 		variables.orders = {}
