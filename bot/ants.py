@@ -53,6 +53,7 @@ class Ants():
         self.attackradius2 = 0
         self.spawnradius2 = 0
         self.turns = 0
+        self.turn_current = 0
 
     def setup(self, data):
         'parse initial input and setup starting game state'
@@ -89,6 +90,9 @@ class Ants():
         
         # reset vision
         self.vision = None
+        
+        # update turn number
+        self.turn_current += 1
         
         # clear hill, ant and food data
         self.hill_list = {}
