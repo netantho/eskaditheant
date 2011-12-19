@@ -29,7 +29,6 @@ class Exploration():
 		"""
 		for row in xrange(self.ants.rows):
 			for col in xrange(self.ants.cols):
-				if self.ants.passable((row,col)):
 					yield (row, col)
 	
 	def remove_seen(self):
