@@ -8,7 +8,7 @@ class Log:
 		
 		\param self
 		"""
-		log_file = 'logs/bot'+str(date.today())+'_'
+		log_file = '../bot/logs/bot'+str(date.today())+'_'
 		i=0
 		while os.path.exists(log_file+str(i)+'.log'):
 			i+=1

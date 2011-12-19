@@ -9,16 +9,17 @@ import logging
 from Queue import Queue
 
 class Pathfinding():
-	def __init__(self, ants):
+	def __init__(self, ants, visualization):
 		"""
 		Constructor
 		
 		\param self
 		\param object instance of the ants class
+		\param object instance of the visualization class
 		"""
 		self.ants = ants
-		self.costs = {}
-
+		self.visualization = visualization
+		
 	def adjacents(self, rc, cc):
 		"""
 		Give the neighbours tiles
@@ -116,6 +117,9 @@ class Pathfinding():
 	def astar_reconstruct_path(self, came_from, current_node):
 		(currentr, currentc) = current_node
 		if came_from[currentr][currentc]:
+			(came_from_r, came_from_c) = came_from[currentr][currentc]
+			self.visualization.set_fill_color(255, 0, 0)
+			self.visualization.arrow(came_from_r, came_from_c, currentr, currentc)
 			p = self.astar_reconstruct_path(came_from, came_from[currentr][currentc])
 			p.append(current_node)
 			return p

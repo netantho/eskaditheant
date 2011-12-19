@@ -7,3 +7,4 @@ import lib.movement
 import lib.orders
 import lib.orders
 import lib.pathfinding
+import lib.visualization

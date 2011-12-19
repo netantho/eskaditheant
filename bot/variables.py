@@ -17,7 +17,8 @@ pathfinding = {}
 # configuration  #
 ##################
 
-log_enabled = 0
+log_enabled = True
+visualisation_enabled = True
 
 move_attempts = 2
 

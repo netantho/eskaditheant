@@ -28,7 +28,7 @@ class MyBot:
 		
 		if variables.log_enabled:
 			self.log = lib.log.Log()
-			logging.basicConfig(filename='logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
+			logging.basicConfig(filename='../bot/logs/bot'+str(date.today())+'_'+str(self.log.get_available_revision())+'.log',level=logging.DEBUG)
 		logging.debug("Args: "+str(sys.argv))
 	
 	def do_setup(self, ants):
@@ -41,8 +41,9 @@ class MyBot:
 		# initialize data structures after learning the game settings
 		self.hills = []
 
+		self.visualization = lib.visualization.Visualization(ants)
 		self.orders = lib.orders.Orders(ants)
-		self.pathfinding = lib.pathfinding.Pathfinding(ants)
+		self.pathfinding = lib.pathfinding.Pathfinding(ants, self.visualization)
 		
 		# generate the graph of the map
 		self.graph = self.pathfinding.generate_graph()

@@ -1,0 +1,10 @@
+BOT0="python ../bot/MyBot.py $(cat maze4p.sh)"
+BOT1="python sample_bots/python/HunterBot.py"
+BOT2="python sample_bots/python/HunterBot.py"
+BOT3="python sample_bots/python/HunterBot.py"
+# MAP="maps/maze/maze_04p_01.map"
+MAP="maps/random_walk/random_walk_p04_07.map"
+TURNS="50"
+LOADTIME="2000"
+TURNTIME="400"
+python aichallenge/ants/playgame.py "$BOT0" "$BOT1" "$BOT2" "$BOT3" --map_file $MAP --log_dir eskadi --turns $TURNS --verbose --log_error -e --turntime $TURNTIME --loadtime=$LOADTIME
