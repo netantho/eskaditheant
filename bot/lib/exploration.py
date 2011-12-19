@@ -8,16 +8,18 @@ import logging
 import random
 
 class Exploration():
-	def __init__(self, ants, movement):
+	def __init__(self, ants, movement, visualization):
 		"""
 		Constructor
 		
 		\param self
 		\param object instance of the ants class
 		\param object instance of the movement class
+		\param object instance of the visualization class
 		"""
 		self.ants = ants
 		self.movement = movement
+		self.visualization = visualization
 		self.unseen = []
 	
 	def generate_unseen(self):
@@ -38,7 +40,7 @@ class Exploration():
 		\param self
 		"""
 		for loc in self.unseen[:]: # : to make sure this list is different from the one we are deleting from
-			if self.ants.visible(loc) or self.ants or not self.ants.passable(loc):
+			if self.ants.visible(loc) or not self.ants.passable(loc):
 				self.unseen.remove(loc)
 	
 	def refresh(self):

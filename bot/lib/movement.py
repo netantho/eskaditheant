@@ -31,7 +31,7 @@ class Movement():
 			new_loc = self.ants.destination(loc, direction)
 			# unoccupied : without food or ant
 			# We don't want to go where another ant has already gone, and not the last location
-			if (self.ants.unoccupied(new_loc) and (new_loc not in variables.orders) and (loc not in variables.orders.values())):
+			if (self.ants.passable(new_loc) and new_loc not in variables.orders and loc not in variables.orders.values() and not (new_loc in self.ants.my_ants() and new_loc not in variables.orders.values())):
 				# Go !
 				self.ants.issue_order((loc, direction))
 				# Save the order
@@ -55,6 +55,12 @@ class Movement():
 			#directions = self.pathfinding.coordinates_to_directions(self.pathfinding.bfs(loc, dest, self.graph))
 			(locr, locc) = loc
 			(destr, destc) = dest
+			
+			if loc in variables.targets.values():
+				logging.debug("do_move_location ant "+str(loc)+" already moving")
+				return False
+				
+			
 			if ((loc, dest) not in variables.pathfinding):
 				pathfinding = self.pathfinding.astar(locr, locc, destr, destc)
 				if (not pathfinding):
@@ -73,12 +79,12 @@ class Movement():
 			dest_loc = self.ants.destination(loc, direction)
 
 			if self.do_move_direction(loc, direction):
-				if cat == 'food':
-					variables.targets[direction] = loc
+				if cat == 'food' or cat == 'attack' :
+					variables.targets[dest] = loc
 				return True
 			elif dest_loc in self.ants.my_ants() and self.shift_ant(dest_loc) and self.do_move_direction(loc, direction):
-				if cat == 'food':
-					variables.targets[direction] = loc
+				if cat == 'food' or cat == 'attack' :
+					variables.targets[dest] = loc
 				return True
 			
 			logging.error("do_move_location stuck from "+str(loc)+", wants to go "+direction)

@@ -43,26 +43,26 @@ class Visualization():
 		sys.stdout.write('v rect '+str(r)+' '+str(c)+' '+str(width)+' '+str(height)+' '+str(fill)+'\n')
 		sys.stdout.flush()
 	
-	def route_plan(r, c, plan_string):
+	def route_plan(self, r, c, plan_string):
 		sys.stdout.write('v routePlan '+str(r)+' '+str(c)+' '+str(plan_string)+'\n')
 		sys.stdout.flush()
 	
-	def star(r, c, inner_radius, outer_radius, points_number='4', fill='false'):
+	def star(self, r, c, inner_radius, outer_radius, points_number='4', fill='false'):
 		sys.stdout.write('v star '+str(r)+' '+str(c)+' '+str(inner_radius)+' '+str(outer_radius)+' '+str(points_number)+' '+str(fill)+'\n')
 		sys.stdout.flush()
 	
-	def tile(r, c):
+	def tile(self, r, c):
 		sys.stdout.write('v tile '+str(r)+' '+str(c)+'\n')
 		sys.stdout.flush()
 	
-	def tile_border(r, c, subtile):
+	def tile_border(self, r, c, subtile):
 		sys.stdout.write('v tileBorder '+str(r)+' '+str(c)+' '+str(subtile)+'\n')
 		sys.stdout.flush()
 	
-	def tile_subtile(r, c, subtile):
+	def tile_subtile(self, r, c, subtile):
 		sys.stdout.write('v tileSubtile '+str(r)+' '+str(c)+' '+str(subtile)+'\n')
 		sys.stdout.flush()
 	
-	def information(r, c, text):
+	def information(self, r, c, text):
 		sys.stdout.write('i '+str(r)+' '+str(c)+' '+str(text)+'\n')
 		sys.stdout.flush()

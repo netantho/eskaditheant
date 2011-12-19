@@ -50,9 +50,9 @@ class MyBot:
 		
 		self.movement = lib.movement.Movement(ants, self.pathfinding, self.graph)
 		self.food = lib.food.Food(ants, self.movement)
-		self.attack = lib.attack.Attack(ants, self.movement)
+		self.attack = lib.attack.Attack(ants, self.movement, self.visualization)
 		self.defence = lib.defence.Defence(ants, self.movement)
-		self.exploration = lib.exploration.Exploration(ants, self.movement)
+		self.exploration = lib.exploration.Exploration(ants, self.movement, self.visualization)
 
 		# store unexplored locations
 		self.exploration.unseen = list(self.exploration.generate_unseen())
@@ -85,9 +85,9 @@ class MyBot:
 			#logging.debug(row)
 
 		self.orders.prevent_stepping_hill()
-		self.food.grab_visible_food()
+		self.food.grab_visible_food(int(len(list(ants.my_ants()))*0.5))
 		self.hills = list(self.attack.save_enemy_hills(self.hills))
-		self.attack.attack_hills(self.hills)
+		self.attack.attack_hills(self.hills, int(len(list(ants.my_ants()))*0.3))
 		self.exploration.remove_seen()
 		self.exploration.explore()
 		self.defence.unblock_own_hill_complex()

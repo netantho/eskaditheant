@@ -26,7 +26,7 @@ class Food():
 				dist = self.ants.distance(ant_loc, food_loc)
 				yield (dist, ant_loc, food_loc)
 
-	def grab_visible_food(self):
+	def grab_visible_food(self, limit):
 		"""
 		Calculate distances between ants and food and give orders to grab
 		
@@ -44,5 +44,6 @@ class Food():
 			# give instructions to free ants to grab food
 			for dist, ant_loc, food_loc in ant_dist:
 				# assign an ant to grab food
-				if food_loc not in variables.targets.values() and ant_loc not in variables.targets.values() and self.ants.time_remaining() > variables.idle_time_remaining:
+				if food_loc not in variables.targets and food_loc not in variables.targets.values() and ant_loc not in variables.targets.values() and self.ants.time_remaining() > variables.idle_time_remaining and limit > 0:
+					limit -= 1
 					self.movement.do_move_location(ant_loc, food_loc, 'food')

@@ -62,6 +62,7 @@ class Pathfinding():
 		\param int col of the goal tile
 		\return list path with coordinates of the tiles
 		"""
+		logging.debug(str(self.ants.time_remaining())+" "+str(variables.idle_time_remaining))
 		if self.ants.time_remaining() > variables.idle_time_remaining:
 			def initialize_map():
 				def initialize_row():
@@ -117,9 +118,10 @@ class Pathfinding():
 	def astar_reconstruct_path(self, came_from, current_node):
 		(currentr, currentc) = current_node
 		if came_from[currentr][currentc]:
-			(came_from_r, came_from_c) = came_from[currentr][currentc]
-			self.visualization.set_fill_color(255, 0, 0)
-			self.visualization.arrow(came_from_r, came_from_c, currentr, currentc)
+			if variables.visualization_enabled:
+				(came_from_r, came_from_c) = came_from[currentr][currentc]
+				self.visualization.set_line_color(255, 0, 0)
+				self.visualization.arrow(came_from_r, came_from_c, currentr, currentc)
 			p = self.astar_reconstruct_path(came_from, came_from[currentr][currentc])
 			p.append(current_node)
 			return p

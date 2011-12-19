@@ -18,10 +18,10 @@ pathfinding = {}
 ##################
 
 log_enabled = True
-visualisation_enabled = True
+visualization_enabled = True
 
-move_attempts = 2
+move_attempts = 1
 
 idle_time_remaining = 0
-idle_time_ini = 0.20
-idle_time_per_ant = 2
+idle_time_ini = 0.25
+idle_time_per_ant = 4
